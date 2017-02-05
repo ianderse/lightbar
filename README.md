@@ -10,8 +10,14 @@ It comes with:
 - Jest 18.1
 
 ## Pre-requisites
-- Install Android SDK and Android Studio
-- _(Optional)_ Install Xcode for iOS development
+- Node.js 6.x or higher
+- NPM 4.x or higher
+- Java SDK (JDK)
+- Android SDK and Android Studio
+- _(Optional)_ Xcode for iOS development
+### Will see how to install
+- Yarn Package Manager
+- React Native command line interface
 
 
 ## Start a project
