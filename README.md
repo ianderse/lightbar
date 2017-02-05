@@ -15,9 +15,9 @@ It comes with:
 - Java SDK (JDK)
 - Android SDK and Android Studio
 - _(Optional)_ Xcode for iOS development
-### Will see how to install
-- Yarn Package Manager
-- React Native command line interface
+- Will see how to install:
+  - Yarn Package Manager
+  - React Native command line interface
 
 
 ## Start a project
