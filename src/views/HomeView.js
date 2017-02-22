@@ -84,10 +84,10 @@ export default class HomeView extends Component {
           title={buttonTitle}
           onPress={() => navigate('Demo', { title: 'Demo Page' })}
         />
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
+        <Button
+          title="Go to Bluetooth Page"
+          onPress={() => navigate('Ble', { title: 'Bluetooth Page' })}
+        />
       </View>
     );
   }
