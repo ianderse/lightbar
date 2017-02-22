@@ -11,6 +11,11 @@ function demo (state = initialState, action) {
         ...state,
         posts: [...state.posts, action.post]
       };
+    case types.REMOVE_POST:
+      return {
+        ...state,
+        posts: [...state.posts.slice(0, -1)]
+      };
     default:
       return state;
   }

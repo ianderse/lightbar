@@ -6,3 +6,9 @@ export const addPost = (post) => {
     post
   }
 }
+
+export const removePost = () => {
+  return {
+    type: types.REMOVE_POST,
+  }
+}

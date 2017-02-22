@@ -15,8 +15,12 @@ class DemoView extends Component {
     title: "Demo"
   }
 
-  onButtonPress() {
+  onAddPress() {
     this.props.actions.addPost({index: this.props.posts.length, title: 'New post!'});
+  }
+
+  onRemovePress() {
+    this.props.actions.removePost();
   }
 
   displayPosts() {
@@ -42,7 +46,11 @@ class DemoView extends Component {
         {posts}
         <Button
           title="Add Post"
-          onPress={() => this.onButtonPress()}
+          onPress={() => this.onAddPress()}
+        />
+        <Button
+          title="Remove Post"
+          onPress={() => this.onRemovePress()}
         />
         <Text style={styles.welcome}>
           { params.title }
