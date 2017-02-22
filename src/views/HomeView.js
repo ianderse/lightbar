@@ -3,24 +3,85 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  TextInput,
+  AsyncStorage
 } from 'react-native';
 
 export default class HomeView extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { userName: '', loggedIn: false }
+    this.persistData = this.persistData.bind(this);
+    this.clearData = this.clearData.bind(this);
+  }
+
   static navigationOptions = {
     title: "Welcome",
   }
 
+  componentWillMount() {
+    this.getData();
+  }
+
+  clearData() {
+    AsyncStorage.clear();
+    this.setState({userName: '', loggedIn: false});
+  }
+
+  persistData() {
+    AsyncStorage.setItem('userName', this.state.userName).done();
+    this.setState({loggedIn: true});
+  }
+
+  getData() {
+    AsyncStorage.getItem('userName').then((name) => {
+      if (name) {
+        this.setState({userName: name, loggedIn: true})
+      };
+    });
+  }
+
+  createLoginLogoutButton() {
+    let button;
+
+    if (this.state.loggedIn) {
+      button = (
+        <Button
+          title="Logout"
+          onPress={this.clearData}
+        />
+      );
+    } else {
+      button = (
+        <Button
+          title="Login"
+          onPress={this.persistData}
+        />
+      );
+    }
+
+    return button;
+  }
+
   render() {
     const { navigate } = this.props.navigation;
+    var buttonTitle = `Go to Demo Page ${this.state.userName}`
+    var loginLogoutButton = this.createLoginLogoutButton();
 
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
+          Enter username:
         </Text>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          value={this.state.userName}
+          onChangeText={(text) => this.setState({userName: text})}
+        />
+        {loginLogoutButton}
         <Button
-          title="Go to Demo Page"
+          title={buttonTitle}
           onPress={() => navigate('Demo', { title: 'Demo Page' })}
         />
         <Text style={styles.instructions}>
