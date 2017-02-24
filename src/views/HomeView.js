@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import AppText from '../components/appText';
+import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import BleManager from 'react-native-ble-manager';
 
@@ -92,11 +93,10 @@ class HomeView extends Component {
           value={this.state.password}
           onChangeText={(text) => this.setState({password: text})}
         />
-        <TouchableHighlight
-          style={styles.button}
+        <AppButton
           onPress={() => navigate(navTo)} >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableHighlight>
+          Login
+        </AppButton>
       </View>
     );
   }
@@ -123,26 +123,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 15,
     fontFamily: 'AvenirNextCondensed-Bold',
-  },
-  button: {
-    height: 65,
-    width: 140,
-    borderWidth: 1,
-    borderColor: '#57BC90',
-    backgroundColor: '#015249',
-    borderRadius: 8,
-    shadowColor: '#000000',
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 50,
-    shadowRadius: 2,
-    marginTop: 15,
-  },
-  buttonText: {
-    textAlign: 'center',
-    fontSize: 24,
-    fontFamily: 'AvenirNextCondensed-Bold',
-    color: '#FFF',
-    marginTop: 14,
   },
 });
 
