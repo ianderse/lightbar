@@ -5,8 +5,11 @@ import {
   View,
   Button,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  TouchableHighlight
 } from 'react-native';
+
+import AppText from '../components/appText';
 
 export default class HomeView extends Component {
   constructor(props) {
@@ -42,52 +45,33 @@ export default class HomeView extends Component {
     });
   }
 
-  createLoginLogoutButton() {
-    let button;
-
-    if (this.state.loggedIn) {
-      button = (
-        <Button
-          title="Logout"
-          onPress={this.clearData}
-        />
-      );
-    } else {
-      button = (
-        <Button
-          title="Login"
-          onPress={this.persistData}
-        />
-      );
-    }
-
-    return button;
-  }
-
   render() {
     const { navigate } = this.props.navigation;
-    var buttonTitle = `Go to Demo Page ${this.state.userName}`
-    var loginLogoutButton = this.createLoginLogoutButton();
 
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Enter username:
-        </Text>
+        <AppText style={{marginBottom: 130}}>
+          <Text style={styles.title}>
+            Lightbar
+          </Text>
+        </AppText>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={styles.input}
+          placeholder="Username"
           value={this.state.userName}
           onChangeText={(text) => this.setState({userName: text})}
         />
-        {loginLogoutButton}
-        <Button
-          title={buttonTitle}
-          onPress={() => navigate('Demo', { title: 'Demo Page' })}
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={this.state.userName}
+          onChangeText={(text) => this.setState({userName: text})}
         />
-        <Button
-          title="Go to Bluetooth Page"
-          onPress={() => navigate('Ble', { title: 'Bluetooth Page' })}
-        />
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => navigate('Ble', { title: 'Bluetooth Page' })} >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -98,16 +82,40 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#77C9D4',
   },
-  welcome: {
-    fontSize: 20,
+  title: {
+    fontSize: 64,
     textAlign: 'center',
-    margin: 10,
   },
-  instructions: {
+  input: {
+    height: 50,
+    width: 235,
+    borderWidth: 1,
+    borderColor: '#57BC90',
+    backgroundColor: '#FFF',
     textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    alignSelf: 'center',
+    marginVertical: 15,
+    fontFamily: 'AvenirNextCondensed-Bold',
+  },
+  button: {
+    height: 65,
+    width: 140,
+    borderWidth: 1,
+    borderColor: '#57BC90',
+    backgroundColor: '#015249',
+    borderRadius: 8,
+    shadowColor: '#000000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 50,
+    shadowRadius: 2,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontFamily: 'AvenirNextCondensed-Bold',
+    color: '#FFF',
+    marginTop: 14,
   },
 });
