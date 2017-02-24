@@ -6,3 +6,9 @@ export const updateConnectedDevice = (device) => {
     device
   }
 }
+
+export const disconnectDevice = () => {
+  return {
+    type: types.DISCONNECT_DEVICE
+  }
+}

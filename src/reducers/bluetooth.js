@@ -11,6 +11,11 @@ function bluetooth (state = initialState, action) {
         ...state,
         device: action.device
       };
+    case types.DISCONNECT_DEVICE:
+        return {
+          ...state,
+          device: null
+        };
     default:
       return state;
   }

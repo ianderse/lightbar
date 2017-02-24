@@ -9,7 +9,7 @@ import {
   TextInput,
   TouchableHighlight,
 } from 'react-native';
-
+import * as bluetoothActions from '../actions/bluetoothActions';
 import base64 from 'base64-js';
 import BleManager from 'react-native-ble-manager';
 
@@ -41,19 +41,30 @@ class DeviceView extends Component {
       });
   }
 
+  disconnectDevice() {
+    const { navigate } = this.props.navigation;
+    BleManager.disconnect(this.props.device.id)
+      .then(() => {
+	this.props.actions.disconnectDevice();
+	console.log('Disconnected');
+	navigate('Ble', { title: 'Bluetooth'});
+      })
+      .catch((error) => {
+	console.log(error);
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        {Object.keys(this.props.device).map((e) =>
-         <Text>
-           {e + " : " + this.props.device[e]}
-         </Text>
-        )}
-        <TouchableHighlight style={{padding:20, backgroundColor:'#ccc'}} onPress={() => this.sendCommand("On") }>
+        <TouchableHighlight style={{padding:20, margin: 20, backgroundColor:'#ccc'}} onPress={() => this.sendCommand("On") }>
           <Text>On</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={{padding:20, backgroundColor:'#ccc'}} onPress={() => this.sendCommand("Off") }>
+        <TouchableHighlight style={{padding:20, margin: 20, backgroundColor:'#ccc'}} onPress={() => this.sendCommand("Off") }>
           <Text>Off</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={{padding:20, margin: 20, backgroundColor:'#ccc'}} onPress={() => this.disconnectDevice() }>
+	  <Text>Disconnect</Text>
         </TouchableHighlight>
       </View>
     )
@@ -87,6 +98,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    actions: bindActionCreators(bluetoothActions, dispatch)
   };
 }
 
