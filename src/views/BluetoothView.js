@@ -8,7 +8,8 @@ import {
   TouchableHighlight,
   NativeAppEventEmitter,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  AsyncStorage
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import * as bluetoothActions from '../actions/bluetoothActions';
@@ -73,6 +74,7 @@ class BluetoothView extends Component {
         .then((device) => {
           console.log('Connected');
           console.log(device);
+          AsyncStorage.setItem('device', device);
           this.props.actions.updateConnectedDevice(device);
           navigate('Device');
         }).catch((error) => {

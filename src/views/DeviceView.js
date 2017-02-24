@@ -8,6 +8,7 @@ import {
   Button,
   TextInput,
   TouchableHighlight,
+  AsyncStorage,
 } from 'react-native';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import base64 from 'base64-js';
@@ -49,6 +50,7 @@ class DeviceView extends Component {
     BleManager.disconnect(this.props.device.id)
       .then(() => {
 	this.props.actions.disconnectDevice();
+        AsyncStorage.removeItem('device');
 	navigate('Ble', { title: 'Bluetooth'});
       })
       .catch((error) => {

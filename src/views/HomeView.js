@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
   StyleSheet,
   Text,
@@ -10,8 +12,10 @@ import {
 } from 'react-native';
 
 import AppText from '../components/appText';
+import * as bluetoothActions from '../actions/bluetoothActions';
+import BleManager from 'react-native-ble-manager';
 
-export default class HomeView extends Component {
+class HomeView extends Component {
   constructor(props) {
     super(props)
     this.state = { userName: '', password: '', loggedIn: false }
@@ -27,6 +31,23 @@ export default class HomeView extends Component {
 
   componentWillMount() {
     this.getData();
+    this.autoConnect();
+  }
+
+  autoConnect() {
+    AsyncStorage.getItem('device').then((device) => {
+      if (device) {
+        this.props.actions.updateConnectedDevice(device);
+        BleManager.connect(this.props.device.id)
+        .then((device) => {
+          console.log('Connected');
+          console.log(device);
+          this.props.actions.updateConnectedDevice(device);
+        }).catch((error) => {
+          console.log(error);
+        });
+      };
+    });
   }
 
   clearData() {
@@ -49,6 +70,7 @@ export default class HomeView extends Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    const navTo = this.props.device ? 'Device' : 'Ble';
 
     return (
       <View style={styles.container}>
@@ -72,7 +94,7 @@ export default class HomeView extends Component {
         />
         <TouchableHighlight
           style={styles.button}
-          onPress={() => navigate('Ble', { title: 'Bluetooth Page' })} >
+          onPress={() => navigate(navTo)} >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableHighlight>
       </View>
@@ -123,3 +145,17 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
 });
+
+function mapStateToProps(state) {
+  return {
+    device: state.bluetooth.device
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(bluetoothActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeView);
