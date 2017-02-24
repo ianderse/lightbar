@@ -144,7 +144,6 @@ class BluetoothView extends Component {
 
 function mapStateToProps(state) {
   return {
-    posts: state.demo.posts
   };
 }
 

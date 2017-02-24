@@ -14,13 +14,15 @@ import AppText from '../components/appText';
 export default class HomeView extends Component {
   constructor(props) {
     super(props)
-    this.state = { userName: '', loggedIn: false }
+    this.state = { userName: '', password: '', loggedIn: false }
     this.persistData = this.persistData.bind(this);
     this.clearData = this.clearData.bind(this);
   }
 
   static navigationOptions = {
-    title: "Login",
+    header: {
+      visible: false,
+    }
   }
 
   componentWillMount() {
@@ -63,9 +65,10 @@ export default class HomeView extends Component {
         />
         <TextInput
           style={styles.input}
+          secureTextEntry={true}
           placeholder="Password"
-          value={this.state.userName}
-          onChangeText={(text) => this.setState({userName: text})}
+          value={this.state.password}
+          onChangeText={(text) => this.setState({password: text})}
         />
         <TouchableHighlight
           style={styles.button}
