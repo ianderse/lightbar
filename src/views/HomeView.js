@@ -17,7 +17,7 @@ export default class HomeView extends Component {
   }
 
   static navigationOptions = {
-    title: "Welcome",
+    title: "Login",
   }
 
   componentWillMount() {
