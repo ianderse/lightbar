@@ -32,7 +32,10 @@ class DeviceView extends Component {
 
   sendCommand(command) {
     var data = base64.fromByteArray(new Uint8Array(this.stringToBytes(command)));
-    BleManager.write(this.props.device.id, '6e400001-b5a3-f393-e0a9-e50e24dcca9e', '6e400002-b5a3-f393-e0a9-e50e24dcca9e', data)
+    const UARTServiceId = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+    const TXServiceId = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+
+    BleManager.write(this.props.device.id, UARTServiceId, TXServiceId, data)
       .then(() => {
         console.log('Write: ' + data);
       })
@@ -46,7 +49,6 @@ class DeviceView extends Component {
     BleManager.disconnect(this.props.device.id)
       .then(() => {
 	this.props.actions.disconnectDevice();
-	console.log('Disconnected');
 	navigate('Ble', { title: 'Bluetooth'});
       })
       .catch((error) => {

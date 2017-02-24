@@ -115,8 +115,10 @@ class BluetoothView extends Component {
       console.log('Got ble data', data);
 
       if (!found) {
-        var newList = this.state.ble.concat(data)
-        this.setState({ ble: newList })
+        if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
+          var newList = this.state.ble.concat(data)
+          this.setState({ ble: newList })
+        }
       }
     }
 
