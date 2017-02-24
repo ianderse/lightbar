@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 50,
     shadowRadius: 2,
+    marginTop: 15,
   },
   buttonText: {
     textAlign: 'center',
