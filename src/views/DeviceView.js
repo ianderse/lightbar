@@ -36,7 +36,7 @@ class DeviceView extends Component {
     const UARTServiceId = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
     const TXServiceId = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
 
-    BleManager.write(this.props.device.id, UARTServiceId, TXServiceId, data)
+    BleManager.write(this.props.deviceId, UARTServiceId, TXServiceId, data)
       .then(() => {
         console.log('Write: ' + data);
       })
@@ -47,10 +47,10 @@ class DeviceView extends Component {
 
   disconnectDevice() {
     const { navigate } = this.props.navigation;
-    BleManager.disconnect(this.props.device.id)
+    BleManager.disconnect(this.props.deviceId)
       .then(() => {
 	this.props.actions.disconnectDevice();
-        AsyncStorage.removeItem('device');
+        AsyncStorage.removeItem('deviceId');
 	navigate('Ble', { title: 'Bluetooth'});
       })
       .catch((error) => {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    device: state.bluetooth.device
+    deviceId: state.bluetooth.deviceId
   };
 }
 

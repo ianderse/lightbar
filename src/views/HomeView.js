@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Button,
+  NativeAppEventEmitter,
   TextInput,
   AsyncStorage,
   TouchableHighlight
@@ -19,7 +20,7 @@ import BleManager from 'react-native-ble-manager';
 class HomeView extends Component {
   constructor(props) {
     super(props)
-    this.state = { userName: '', password: '', loggedIn: false }
+    this.state = { userName: '', password: '', ble: [], loggedIn: false }
     this.persistData = this.persistData.bind(this);
     this.clearData = this.clearData.bind(this);
   }
@@ -35,18 +36,40 @@ class HomeView extends Component {
     this.autoConnect();
   }
 
+  componentDidMount() {
+    BleManager.start({showAlert: false});
+    this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
+
+    NativeAppEventEmitter
+          .addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral );
+  }
+
+  handleDiscoverPeripheral(data){
+    var found = this.state.ble.some(function (e) {
+      return e.id === data.id;
+    });
+
+    console.log('Got ble data', data);
+
+    if (!found) {
+      if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
+        var newList = this.state.ble.concat(data)
+        this.setState({ ble: newList })
+      }
+    }
+  }
+
   autoConnect() {
-    AsyncStorage.getItem('device').then((device) => {
-      if (device) {
-        this.props.actions.updateConnectedDevice(device);
-        BleManager.connect(this.props.device.id)
-        .then((device) => {
-          console.log('Connected');
-          console.log(device);
-          this.props.actions.updateConnectedDevice(device);
-        }).catch((error) => {
-          console.log(error);
-        });
+    console.log('autoconnect');
+    AsyncStorage.getItem('deviceId').then((deviceId) => {
+      console.log('after get: ' + deviceId);
+      if (deviceId) {
+        console.log('AC DiD: ' + deviceId);
+        BleManager.scan([], 2, false)
+          .then((results) => {
+            this.props.actions.updateConnectedDevice(deviceId);
+            BleManager.connect(deviceId)
+          });
       };
     });
   }
@@ -71,7 +94,7 @@ class HomeView extends Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    const navTo = this.props.device ? 'Device' : 'Ble';
+    const navTo = this.props.deviceId ? 'Device' : 'Ble';
 
     return (
       <View style={styles.container}>
@@ -128,7 +151,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    device: state.bluetooth.device
+    deviceId: state.bluetooth.deviceId
   };
 }
 

@@ -74,8 +74,8 @@ class BluetoothView extends Component {
         .then((device) => {
           console.log('Connected');
           console.log(device);
-          AsyncStorage.setItem('device', device);
-          this.props.actions.updateConnectedDevice(device);
+          AsyncStorage.setItem('deviceId', device.id);
+          this.props.actions.updateConnectedDevice(device.id);
           navigate('Device');
         }).catch((error) => {
           console.log(error);
