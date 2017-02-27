@@ -1,7 +1,7 @@
 import * as types from '../redux/actionTypes';
 
 const initialState = {
-  device: null
+  deviceId: null
 }
 
 function bluetooth (state = initialState, action) {
@@ -9,12 +9,12 @@ function bluetooth (state = initialState, action) {
     case types.UPDATE_CONNECTED_DEVICE:
       return {
         ...state,
-        device: action.device
+        deviceId: action.deviceId
       };
     case types.DISCONNECT_DEVICE:
         return {
           ...state,
-          device: null
+          deviceId: null
         };
     default:
       return state;

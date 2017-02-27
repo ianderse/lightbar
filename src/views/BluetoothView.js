@@ -8,9 +8,11 @@ import {
   TouchableHighlight,
   NativeAppEventEmitter,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  AsyncStorage
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
+import BleHelper from '../helpers/bleHelper.js';
 import * as bluetoothActions from '../actions/bluetoothActions';
 
 class BluetoothView extends Component {
@@ -29,39 +31,17 @@ class BluetoothView extends Component {
 
     componentDidMount() {
       BleManager.start({showAlert: false});
-      this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
 
       NativeAppEventEmitter
-          .addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral );
+          .addListener('BleManagerDiscoverPeripheral', BleHelper.handleDiscoverPeripheral );
 
-      if (Platform.OS === 'android' && Platform.Version >= 23) {
-        PermissionsAndroid.checkPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
-          if (result) {
-            console.log("Permission is OK");
-          } else {
-            PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
-              if (result) {
-                console.log("User accept");
-              } else {
-                console.log("User refuse");
-              }
-            });
-          }
-        });
-      }
-    }
-
-    handleScan() {
-      BleManager.scan([], 2, false)
-        .then((results) => {
-          console.log('Scanning...');
-        });
+      BleHelper.androidCheck();
     }
 
     toggleScanning(bool){
       if (bool) {
         this.setState({ scanning:true })
-        this.scanning = this.handleScan();
+        this.scanning = BleHelper.handleScan();
       } else {
         this.setState({ scanning:false })
       }
@@ -71,9 +51,8 @@ class BluetoothView extends Component {
       const { navigate } = this.props.navigation;
       BleManager.connect(id)
         .then((device) => {
-          console.log('Connected');
-          console.log(device);
-          this.props.actions.updateConnectedDevice(device);
+          AsyncStorage.setItem('deviceId', device.id);
+          this.props.actions.updateConnectedDevice(device.id);
           navigate('Device');
         }).catch((error) => {
           console.log(error);
@@ -105,21 +84,6 @@ class BluetoothView extends Component {
       }
 
       return deviceInfo;
-    }
-
-    handleDiscoverPeripheral(data){
-      var found = this.state.ble.some(function (e) {
-        return e.id === data.id;
-      });
-
-      console.log('Got ble data', data);
-
-      if (!found) {
-        if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
-          var newList = this.state.ble.concat(data)
-          this.setState({ ble: newList })
-        }
-      }
     }
 
     render() {
