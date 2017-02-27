@@ -16,6 +16,7 @@ import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import BleManager from 'react-native-ble-manager';
+import BleHelper from '../helpers/bleHelper.js';
 
 class HomeView extends Component {
   constructor(props) {
@@ -38,25 +39,9 @@ class HomeView extends Component {
 
   componentDidMount() {
     BleManager.start({showAlert: false});
-    this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
 
     NativeAppEventEmitter
-          .addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral );
-  }
-
-  handleDiscoverPeripheral(data){
-    var found = this.state.ble.some(function (e) {
-      return e.id === data.id;
-    });
-
-    console.log('Got ble data', data);
-
-    if (!found) {
-      if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
-        var newList = this.state.ble.concat(data)
-        this.setState({ ble: newList })
-      }
-    }
+          .addListener('BleManagerDiscoverPeripheral', BleHelper.handleDiscoverPeripheral );
   }
 
   autoConnect() {
