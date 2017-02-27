@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as firebase from "firebase";
 import {
   StyleSheet,
   Text,
@@ -16,11 +17,17 @@ import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import BleManager from 'react-native-ble-manager';
+import secrets from '../../secrets.json';
 
 class HomeView extends Component {
   constructor(props) {
     super(props)
-    this.state = { userName: '', password: '', ble: [], loggedIn: false }
+    this.state = {
+      userName: '',
+      password: '',
+      ble: [],
+      loggedIn: false,
+      error: '' }
     this.persistData = this.persistData.bind(this);
     this.clearData = this.clearData.bind(this);
   }
@@ -32,6 +39,7 @@ class HomeView extends Component {
   }
 
   componentWillMount() {
+    this.firebaseSetup();
     this.getData();
     this.autoConnect();
   }
@@ -42,6 +50,48 @@ class HomeView extends Component {
 
     NativeAppEventEmitter
           .addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral );
+  }
+
+  firebaseSetup() {
+    firebase.initializeApp({
+        apiKey: secrets.firebase.apiKey,
+        authDomain: "lightbar-fce66.firebaseapp.com",
+        databaseURL: "https://lightbar-fce66.firebaseio.com",
+        storageBucket: "lightbar-fce66.appspot.com"
+    });
+  }
+
+  // signup function for when functionality is in place
+  async signup(email, pass) {
+    try {
+      await firebase.auth()
+          .createUserWithEmailAndPassword(email, pass);
+      console.log("Account created");
+      this.nextPage();
+    } catch (error) {
+      console.log(error)
+      this.setState({ error: error.message });
+    }
+
+  }
+
+  async login() {
+    try {
+      await firebase.auth()
+          .signInWithEmailAndPassword(this.state.userName, this.state.password);
+      this.nextPage();
+    } catch (error) {
+      console.log(error)
+      this.setState({ error: error.message });
+    }
+
+  }
+
+  nextPage() {
+    const navTo = this.props.deviceId ? 'Device' : 'Ble';
+    const { navigate } = this.props.navigation;
+
+    navigate(navTo)
   }
 
   handleDiscoverPeripheral(data){
@@ -93,8 +143,6 @@ class HomeView extends Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
-    const navTo = this.props.deviceId ? 'Device' : 'Ble';
 
     return (
       <View style={styles.container}>
@@ -117,9 +165,12 @@ class HomeView extends Component {
           onChangeText={(text) => this.setState({password: text})}
         />
         <AppButton
-          onPress={() => navigate(navTo)} >
+          onPress={() => this.login() } >
           Login
         </AppButton>
+        <AppText style={styles.error}>
+          {this.state.error}
+        </AppText>
       </View>
     );
   }
@@ -131,6 +182,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#77C9D4',
+  },
+  error: {
+    fontSize: 16,
+    color: 'red',
   },
   title: {
     fontSize: 64,
