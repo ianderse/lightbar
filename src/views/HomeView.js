@@ -58,10 +58,8 @@ class HomeView extends Component {
     try {
       await firebase.auth()
           .createUserWithEmailAndPassword(email, pass);
-      console.log("Account created");
       this.nextPage();
     } catch (error) {
-      console.log(error)
       this.setState({ error: error.message });
     }
 
@@ -74,7 +72,6 @@ class HomeView extends Component {
       this.persistUser();
       this.nextPage();
     } catch (error) {
-      console.log(error)
       this.setState({ password: null, error: error.message, loggedIn: true });
     }
   }
@@ -96,11 +93,8 @@ class HomeView extends Component {
   }
 
   autoConnect() {
-    console.log('autoconnect');
     AsyncStorage.getItem('deviceId').then((deviceId) => {
-      console.log('after get: ' + deviceId);
       if (deviceId) {
-        console.log('AC DiD: ' + deviceId);
         BleManager.scan([], 2, false)
           .then((results) => {
             this.props.bleActions.updateConnectedDevice(deviceId);
@@ -122,9 +116,7 @@ class HomeView extends Component {
 
   getData() {
     AsyncStorage.getItem('user').then((name) => {
-      console.log(name);
       if (name) {
-        console.log(name);
         this.props.accountActions.updateUser(name);
       };
     });
@@ -132,7 +124,6 @@ class HomeView extends Component {
 
   buildWelcome() {
     let welcome;
-    console.log(this.props);
 
     if (this.props.user) {
       welcome = (

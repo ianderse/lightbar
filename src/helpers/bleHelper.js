@@ -10,8 +10,6 @@ export default class BleHelper {
       return e.id === data.id;
     });
 
-    console.log('Got ble data', data);
-
     if (!found) {
       if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
         var newList = this.state.ble.concat(data)
