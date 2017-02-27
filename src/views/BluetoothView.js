@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
+  StyleSheet,
   AppRegistry,
   Text,
   View,
@@ -14,6 +15,8 @@ import {
 import BleManager from 'react-native-ble-manager';
 import BleHelper from '../helpers/bleHelper.js';
 import * as bluetoothActions from '../actions/bluetoothActions';
+import AppText from '../components/appText';
+import AppButton from '../components/appButton';
 
 class BluetoothView extends Component {
     static navigationOptions = {
@@ -66,45 +69,60 @@ class BluetoothView extends Component {
           <View>
             {this.state.ble.map((e) =>
               <View key={e.id}>
-                <Text>
+                <AppText>
                   Device ID: {e.id}
-                </Text>
-                <Text>
-                  Device Name: {e.advertising.kCBAdvDataLocalName}
-                </Text>
-                <TouchableHighlight style={{padding:10, backgroundColor:'#ccc'}} onPress={() => this.connect(e.id)}>
+                </AppText>
+                <AppText>
+                  Lightbar Found
+                </AppText>
+                <AppButton onPress={() => this.connect(e.id)}>
                   <Text>Connect</Text>
-                </TouchableHighlight>
+                </AppButton>
               </View>
             )}
           </View>
         )
       } else {
-        deviceInfo = <Text>No devices found</Text>
+        deviceInfo = <AppText style={styles.error}>No devices found</AppText>
       }
 
       return deviceInfo;
     }
 
     render() {
-      const container = {
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#F5FCFF',
-      }
-
       return (
-        <View style={container}>
-          <TouchableHighlight style={{padding:20, backgroundColor:'#ccc'}} onPress={() => this.toggleScanning(!this.state.scanning) }>
-            <Text>Scan Bluetooth ({this.state.scanning ? 'on' : 'off'})</Text>
-          </TouchableHighlight>
-
+        <View style={styles.container}>
+          <AppText style={styles.title}>
+            Connect to Lightbar
+          </AppText>
           {this.buildDeviceInfo()}
+          <AppButton onPress={() => this.toggleScanning(!this.state.scanning) }>
+            <Text>Scan ({this.state.scanning ? 'on' : 'off'})</Text>
+          </AppButton>
+
         </View>
       );
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#77C9D4',
+  },
+  error: {
+    fontSize: 16,
+    color: 'red',
+  },
+  title: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    fontSize: 64,
+    textAlign: 'center',
+  },
+});
+
 
 function mapStateToProps(state) {
   return {
