@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as firebase from "firebase";
+import * as firebase from 'firebase';
 import {
   StyleSheet,
   Text,
@@ -16,20 +16,21 @@ import {
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
+import * as accountActions from '../actions/accountActions';
 import BleManager from 'react-native-ble-manager';
-import secrets from '../../secrets.json';
 import BleHelper from '../helpers/bleHelper.js';
+import FirebaseHelper from '../helpers/firebaseHelper.js';
 
 class HomeView extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userName: '',
+      user: '',
       password: '',
       ble: [],
       loggedIn: false,
       error: '' }
-    this.persistData = this.persistData.bind(this);
+    this.persistUser = this.persistUser.bind(this);
     this.clearData = this.clearData.bind(this);
   }
 
@@ -40,7 +41,7 @@ class HomeView extends Component {
   }
 
   componentWillMount() {
-    this.firebaseSetup();
+    FirebaseHelper.firebaseSetup();
     this.getData();
     this.autoConnect();
   }
@@ -50,15 +51,6 @@ class HomeView extends Component {
 
     NativeAppEventEmitter
           .addListener('BleManagerDiscoverPeripheral', BleHelper.handleDiscoverPeripheral );
-  }
-
-  firebaseSetup() {
-    firebase.initializeApp({
-        apiKey: secrets.firebase.apiKey,
-        authDomain: "lightbar-3388c.firebaseapp.com",
-        databaseURL: "https://lightbar-3388c.firebaseio.com",
-        storageBucket: "lightbar-3388c.appspot.com"
-    });
   }
 
   // signup function for when functionality is in place
@@ -78,13 +70,22 @@ class HomeView extends Component {
   async login() {
     try {
       await firebase.auth()
-          .signInWithEmailAndPassword(this.state.userName, this.state.password);
+          .signInWithEmailAndPassword(this.state.user, this.state.password);
+      this.persistUser();
       this.nextPage();
     } catch (error) {
       console.log(error)
-      this.setState({ error: error.message });
+      this.setState({ password: null, error: error.message, loggedIn: true });
     }
+  }
 
+  async logout() {
+    try {
+      await firebase.auth().signOut();
+      this.clearData();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   nextPage() {
@@ -102,7 +103,7 @@ class HomeView extends Component {
         console.log('AC DiD: ' + deviceId);
         BleManager.scan([], 2, false)
           .then((results) => {
-            this.props.actions.updateConnectedDevice(deviceId);
+            this.props.bleActions.updateConnectedDevice(deviceId);
             BleManager.connect(deviceId)
           });
       };
@@ -111,24 +112,78 @@ class HomeView extends Component {
 
   clearData() {
     AsyncStorage.clear();
-    this.setState({userName: '', loggedIn: false});
+    this.props.accountActions.logoutUser();
+    this.setState({user: '', loggedIn: false});
   }
 
-  persistData() {
-    AsyncStorage.setItem('userName', this.state.userName).done();
-    this.setState({loggedIn: true});
+  persistUser() {
+    AsyncStorage.setItem('user', this.state.user).done();
   }
 
   getData() {
-    AsyncStorage.getItem('userName').then((name) => {
+    AsyncStorage.getItem('user').then((name) => {
+      console.log(name);
       if (name) {
-        this.setState({userName: name, loggedIn: true})
+        console.log(name);
+        this.props.accountActions.updateUser(name);
       };
     });
   }
 
+  buildWelcome() {
+    let welcome;
+    console.log(this.props);
+
+    if (this.props.user) {
+      welcome = (
+        <View>
+          <AppText>
+            Welcome {this.props.user}
+          </AppText>
+          <AppButton
+            style={{alignSelf: 'center'}}
+            onPress={() => this.nextPage() } >
+            Enter
+          </AppButton>
+          <AppButton
+            style={{alignSelf: 'center'}}
+            onPress={() => this.logout() } >
+            Logout
+          </AppButton>
+
+        </View>
+      );
+    } else {
+      welcome = (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={this.state.userName}
+            onChangeText={(text) => this.setState({user: text})}
+          />
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            placeholder="Password"
+            value={this.state.password}
+            onChangeText={(text) => this.setState({password: text})}
+          />
+          <AppButton
+            style={{alignSelf: 'center'}}
+            onPress={() => this.login() } >
+            Login
+          </AppButton>
+
+        </View>
+      )
+    }
+    return welcome;
+  }
+
   render() {
 
+    const welcomeSection = this.buildWelcome();
     return (
       <View style={styles.container}>
         <AppText style={{marginBottom: 130}}>
@@ -136,23 +191,7 @@ class HomeView extends Component {
             Lightbar
           </Text>
         </AppText>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={this.state.userName}
-          onChangeText={(text) => this.setState({userName: text})}
-        />
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          placeholder="Password"
-          value={this.state.password}
-          onChangeText={(text) => this.setState({password: text})}
-        />
-        <AppButton
-          onPress={() => this.login() } >
-          Login
-        </AppButton>
+        {welcomeSection}
         <AppText style={styles.error}>
           {this.state.error}
         </AppText>
@@ -191,13 +230,15 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    deviceId: state.bluetooth.deviceId
+    deviceId: state.bluetooth.deviceId,
+    user: state.account.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(bluetoothActions, dispatch)
+    bleActions: bindActionCreators(bluetoothActions, dispatch),
+    accountActions: bindActionCreators(accountActions, dispatch)
   };
 }
 
