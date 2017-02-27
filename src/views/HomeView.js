@@ -55,9 +55,9 @@ class HomeView extends Component {
   firebaseSetup() {
     firebase.initializeApp({
         apiKey: secrets.firebase.apiKey,
-        authDomain: "lightbar-fce66.firebaseapp.com",
-        databaseURL: "https://lightbar-fce66.firebaseio.com",
-        storageBucket: "lightbar-fce66.appspot.com"
+        authDomain: "lightbar-3388c.firebaseapp.com",
+        databaseURL: "https://lightbar-3388c.firebaseio.com",
+        storageBucket: "lightbar-3388c.appspot.com"
     });
   }
 
