@@ -48,9 +48,6 @@ class HomeView extends Component {
 
   componentDidMount() {
     BleManager.start({showAlert: false});
-
-    NativeAppEventEmitter
-          .addListener('BleManagerDiscoverPeripheral', BleHelper.handleDiscoverPeripheral );
   }
 
   // signup function for when functionality is in place

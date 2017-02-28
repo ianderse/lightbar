@@ -5,20 +5,6 @@ import {
 } from 'react-native';
 
 export default class BleHelper {
-  static handleDiscoverPeripheral(data) {
-    var found = this.state.ble.some(function (e) {
-      return e.id === data.id;
-    });
-
-    if (!found) {
-      if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
-        var newList = this.state.ble.concat(data)
-        this.setState({ ble: newList })
-      }
-    }
-
-  }
-
   static handleScan() {
     BleManager.scan([], 2, false)
         .then((results) => {

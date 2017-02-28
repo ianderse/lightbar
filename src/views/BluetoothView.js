@@ -34,11 +34,25 @@ class BluetoothView extends Component {
 
     componentDidMount() {
       BleManager.start({showAlert: false});
+      this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
 
       NativeAppEventEmitter
-          .addListener('BleManagerDiscoverPeripheral', BleHelper.handleDiscoverPeripheral );
+          .addListener('BleManagerDiscoverPeripheral', this.handleDiscoverPeripheral );
 
       BleHelper.androidCheck();
+    }
+
+    handleDiscoverPeripheral(data) {
+      var found = this.state.ble.some(function (e) {
+        return e.id === data.id;
+      });
+
+      if (!found) {
+        if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
+          var newList = this.state.ble.concat(data)
+          this.setState({ ble: newList })
+        }
+      }
     }
 
     toggleScanning(bool){
