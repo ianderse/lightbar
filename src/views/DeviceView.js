@@ -10,6 +10,9 @@ import {
   TouchableHighlight,
   AsyncStorage,
 } from 'react-native';
+
+import AppText from '../components/appText';
+import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import base64 from 'base64-js';
 import BleManager from 'react-native-ble-manager';
@@ -61,15 +64,15 @@ class DeviceView extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableHighlight style={{padding:20, margin: 20, backgroundColor:'#ccc'}} onPress={() => this.sendCommand("On") }>
-          <Text>On</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={{padding:20, margin: 20, backgroundColor:'#ccc'}} onPress={() => this.sendCommand("Off") }>
-          <Text>Off</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={{padding:20, margin: 20, backgroundColor:'#ccc'}} onPress={() => this.disconnectDevice() }>
-	  <Text>Disconnect</Text>
-        </TouchableHighlight>
+        <AppButton onPress={() => this.sendCommand("On") }>
+          On
+        </AppButton>
+        <AppButton onPress={() => this.sendCommand("Off") }>
+          Off
+        </AppButton>
+        <AppButton onPress={() => this.disconnectDevice() }>
+	  Disconnect
+        </AppButton>
       </View>
     )
   }
@@ -80,17 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    backgroundColor: '#77C9D4',
   },
 });
 

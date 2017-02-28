@@ -17,6 +17,7 @@ export default class AppButton extends Component {
 
 const styles = StyleSheet.create({
   defaultButton: {
+    alignSelf: 'center',
     height: 65,
     width: 140,
     borderWidth: 1,

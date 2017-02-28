@@ -129,12 +129,10 @@ class HomeView extends Component {
             Welcome {this.props.user}
           </AppText>
           <AppButton
-            style={{alignSelf: 'center'}}
             onPress={() => this.nextPage() } >
             Enter
           </AppButton>
           <AppButton
-            style={{alignSelf: 'center'}}
             onPress={() => this.logout() } >
             Logout
           </AppButton>
