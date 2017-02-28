@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "ios": "./node_modules/.bin/eslint src/* && react-native run-ios", 
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
@@ -19,8 +20,11 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "babel-eslint": "^7.1.1",
     "babel-jest": "18.0.0",
     "babel-preset-react-native": "1.9.1",
+    "eslint": "^3.16.1",
+    "eslint-plugin-react": "^6.10.0",
     "jest": "18.1.0",
     "react-test-renderer": "~15.4.0-rc.4"
   },

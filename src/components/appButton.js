@@ -40,3 +40,9 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
 });
+
+AppButton.propTypes = {
+  onPress: React.PropTypes.func,
+  style: React.PropTypes.object,
+  children: React.PropTypes.string,
+};

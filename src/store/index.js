@@ -11,9 +11,11 @@ const middleware = applyMiddleware(
   logger
 );
 
+const initialState = {};
+
 const store = createStore(
   reducers,
-  initialState = {},
+  initialState,
   middleware
 );
 

@@ -3,13 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   StyleSheet,
-  AppRegistry,
   Text,
   View,
-  TouchableHighlight,
   NativeAppEventEmitter,
-  Platform,
-  PermissionsAndroid,
   AsyncStorage
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
@@ -73,7 +69,7 @@ class BluetoothView extends Component {
           this.props.actions.updateConnectedDevice(device.id);
           navigate('Device');
         }).catch((error) => {
-          console.log(error);
+          return error;
         });
     }
 
@@ -112,9 +108,8 @@ class BluetoothView extends Component {
           </AppText>
           {this.buildDeviceInfo()}
           <AppButton onPress={() => this.toggleScanning(!this.state.scanning) }>
-            <Text>Scan</Text>
+            Scan
           </AppButton>
-
         </View>
       );
     }
@@ -139,15 +134,16 @@ const styles = StyleSheet.create({
 });
 
 
-function mapStateToProps(state) {
-  return {
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(bluetoothActions, dispatch)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BluetoothView);
+BluetoothView.propTypes = {
+  navigation: React.PropTypes.object,
+  actions: React.PropTypes.object,
+  children: React.PropTypes.string,
+};
+
+export default connect(mapDispatchToProps)(BluetoothView);

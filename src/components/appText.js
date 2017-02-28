@@ -23,3 +23,8 @@ const styles = StyleSheet.create({
     color: gStyles.text.color,
   }
 });
+
+AppText.propTypes = {
+  style: React.PropTypes.number,
+  children: React.PropTypes.string,
+}

@@ -4,13 +4,9 @@ import { bindActionCreators } from 'redux';
 import * as firebase from 'firebase';
 import {
   StyleSheet,
-  Text,
   View,
-  Button,
-  NativeAppEventEmitter,
   TextInput,
   AsyncStorage,
-  TouchableHighlight
 } from 'react-native';
 
 import AppText from '../components/appText';
@@ -19,7 +15,6 @@ import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import * as accountActions from '../actions/accountActions';
 import BleManager from 'react-native-ble-manager';
-import BleHelper from '../helpers/bleHelper.js';
 import FirebaseHelper from '../helpers/firebaseHelper.js';
 
 class HomeView extends Component {
@@ -79,7 +74,7 @@ class HomeView extends Component {
       await firebase.auth().signOut();
       this.clearData();
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -94,11 +89,11 @@ class HomeView extends Component {
     AsyncStorage.getItem('deviceId').then((deviceId) => {
       if (deviceId) {
         BleManager.scan([], 2, false)
-          .then((results) => {
+          .then(() => {
             this.props.bleActions.updateConnectedDevice(deviceId);
             BleManager.connect(deviceId)
           });
-      };
+      }
     });
   }
 
@@ -116,18 +111,19 @@ class HomeView extends Component {
     AsyncStorage.getItem('user').then((name) => {
       if (name) {
         this.props.accountActions.updateUser(name);
-      };
+      }
     });
   }
 
   buildWelcome() {
     let welcome;
+    const welcomeText = `Welcome ${this.props.user}`;
 
     if (this.props.user) {
       welcome = (
         <View>
           <AppText>
-            Welcome {this.props.user}
+          {welcomeText}
           </AppText>
           <AppButton
             onPress={() => this.nextPage() } >
@@ -169,14 +165,11 @@ class HomeView extends Component {
   }
 
   render() {
-
     const welcomeSection = this.buildWelcome();
     return (
       <View style={styles.container}>
-        <AppText style={{marginBottom: 130}}>
-          <Text style={styles.title}>
-            Lightbar
-          </Text>
+        <AppText style={styles.title}>
+          Lightbar
         </AppText>
         {welcomeSection}
         <AppText style={styles.error}>
@@ -228,5 +221,13 @@ function mapDispatchToProps(dispatch) {
     accountActions: bindActionCreators(accountActions, dispatch)
   };
 }
+
+HomeView.propTypes = {
+  navigation: React.PropTypes.object,
+  accountActions: React.PropTypes.object,
+  bleActions: React.PropTypes.object,
+  deviceId: React.PropTypes.string,
+  user: React.PropTypes.string,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeView);

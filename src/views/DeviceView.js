@@ -1,17 +1,13 @@
+/*global Uint8Array */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   StyleSheet,
-  Text,
   View,
-  Button,
-  TextInput,
-  TouchableHighlight,
   AsyncStorage,
 } from 'react-native';
 
-import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
@@ -42,10 +38,10 @@ class DeviceView extends Component {
 
     BleManager.write(this.props.deviceId, UARTServiceId, TXServiceId, data)
       .then(() => {
-        console.log('Write: ' + data);
+        return;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   }
 
@@ -58,7 +54,7 @@ class DeviceView extends Component {
 	navigate('Ble', { title: 'Bluetooth'});
       })
       .catch((error) => {
-	console.log(error);
+        return error;
       });
   }
 
@@ -72,7 +68,7 @@ class DeviceView extends Component {
           Off
         </AppButton>
         <AppButton onPress={() => this.disconnectDevice() }>
-	  Disconnect
+          Disconnect
         </AppButton>
       </View>
     )
@@ -99,5 +95,11 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(bluetoothActions, dispatch)
   };
 }
+
+DeviceView.propTypes = {
+  navigation: React.PropTypes.object,
+  actions: React.PropTypes.object,
+  deviceId: React.PropTypes.string,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeviceView);
