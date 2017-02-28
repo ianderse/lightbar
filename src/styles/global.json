@@ -1,0 +1,28 @@
+{
+  "global": {
+    "fontFamily": "AvenirNextCondensed-Bold",
+  },
+  "container": {
+    "backgroundColor": "#77C9D4",
+  },
+  "error": {
+    "color": "red",
+    "fontSize": 16,
+  },
+  "input": {
+    "borderColor": "#57BC90",
+    "backgroundColor": "#FFF",
+  },
+  "button": {
+    "borderColor": "#57BC90",
+    "backgroundColor": "#015249",
+    "shadowColor": "#000000",
+    "textColor": "#FFF",
+  },
+  "text": {
+    "color": "#FFF",
+  },
+  "title": {
+    "fontSize": 64,
+  }
+}

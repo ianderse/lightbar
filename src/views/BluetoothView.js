@@ -17,6 +17,7 @@ import BleHelper from '../helpers/bleHelper.js';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
+import gStyles from '../styles/global.json';
 
 class BluetoothView extends Component {
     static navigationOptions = {
@@ -111,7 +112,7 @@ class BluetoothView extends Component {
           </AppText>
           {this.buildDeviceInfo()}
           <AppButton onPress={() => this.toggleScanning(!this.state.scanning) }>
-            <Text>Scan ({this.state.scanning ? 'on' : 'off'})</Text>
+            <Text>Scan</Text>
           </AppButton>
 
         </View>
@@ -123,16 +124,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#77C9D4',
+    backgroundColor: gStyles.container.backgroundColor,
   },
   error: {
-    fontSize: 16,
-    color: 'red',
+    fontSize: gStyles.error.fontSize,
+    color: gStyles.error.color,
   },
   title: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    fontSize: 64,
+    fontSize: gStyles.title.fontSize,
     textAlign: 'center',
   },
 });

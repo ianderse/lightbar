@@ -15,6 +15,7 @@ import {
 
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
+import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import * as accountActions from '../actions/accountActions';
 import BleManager from 'react-native-ble-manager';
@@ -191,26 +192,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#77C9D4',
+    backgroundColor: gStyles.container.backgroundColor,
   },
   error: {
-    fontSize: 16,
-    color: 'red',
+    fontSize: gStyles.error.fontSize,
+    color: gStyles.error.color,
   },
   title: {
-    fontSize: 64,
+    fontSize: gStyles.title.fontSize,
     textAlign: 'center',
   },
   input: {
     height: 50,
     width: 235,
     borderWidth: 1,
-    borderColor: '#57BC90',
-    backgroundColor: '#FFF',
+    borderColor: gStyles.input.borderColor,
+    backgroundColor: gStyles.input.backgroundColor,
     textAlign: 'center',
     alignSelf: 'center',
     marginVertical: 15,
-    fontFamily: 'AvenirNextCondensed-Bold',
+    fontFamily: gStyles.global.fontFamily,
   },
 });
 

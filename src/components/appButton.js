@@ -5,6 +5,8 @@ import {
   Text,
 } from 'react-native';
 
+import gStyles from '../styles/global.json';
+
 export default class AppButton extends Component {
   render() {
     return (
@@ -21,10 +23,10 @@ const styles = StyleSheet.create({
     height: 65,
     width: 140,
     borderWidth: 1,
-    borderColor: '#57BC90',
-    backgroundColor: '#015249',
+    borderColor: gStyles.button.borderColor,
+    backgroundColor: gStyles.button.backgroundColor,
     borderRadius: 8,
-    shadowColor: '#000000',
+    shadowColor: gStyles.button.shadowColor,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 50,
     shadowRadius: 2,
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
     fontFamily: 'AvenirNextCondensed-Bold',
-    color: '#FFF',
+    color: gStyles.button.textColor,
     marginTop: 14,
   },
 });

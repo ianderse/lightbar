@@ -13,6 +13,7 @@ import {
 
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
+import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import base64 from 'base64-js';
 import BleManager from 'react-native-ble-manager';
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#77C9D4',
+    backgroundColor: gStyles.container.backgroundColor,
   },
 });
 

@@ -4,6 +4,8 @@ import {
   Text,
 } from 'react-native';
 
+import gStyles from '../styles/global.json';
+
 export default class AppText extends Component {
   render() {
     return (
@@ -17,7 +19,7 @@ export default class AppText extends Component {
 const styles = StyleSheet.create({
   defaultText: {
     fontSize: 24,
-    fontFamily: 'AvenirNextCondensed-Bold',
-    color: '#FFF',
+    fontFamily: gStyles.global.fontFamily,
+    color: gStyles.text.color,
   }
 });
