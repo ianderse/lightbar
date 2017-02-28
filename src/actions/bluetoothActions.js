@@ -12,3 +12,10 @@ export const disconnectDevice = () => {
     type: types.DISCONNECT_DEVICE
   }
 }
+
+export const updateSlider = (newValue) => {
+  return {
+    type: types.UPDATE_SLIDER,
+    newValue
+  }
+}
