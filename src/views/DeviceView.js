@@ -1,18 +1,18 @@
-/*global Uint8Array */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   StyleSheet,
   View,
-  AsyncStorage,
 } from 'react-native';
 
 import AppButton from '../components/appButton';
+import AppText from '../components/appText';
+import AppSlider from '../components/appSlider';
 import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
-import base64 from 'base64-js';
 import BleManager from 'react-native-ble-manager';
+import BleHelper from '../helpers/bleHelper.js';
 
 class DeviceView extends Component {
   constructor(props) {
@@ -23,34 +23,11 @@ class DeviceView extends Component {
     title: "Connected Device",
   }
 
-  stringToBytes(string) {
-    var array = new Uint8Array(string.length);
-    for (var i = 0, l = string.length; i < l; i++) {
-      array[i] = string.charCodeAt(i);
-    }
-    return array;
-  }
-
-  sendCommand(command) {
-    var data = base64.fromByteArray(new Uint8Array(this.stringToBytes(command)));
-    const UARTServiceId = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
-    const TXServiceId = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
-
-    BleManager.write(this.props.deviceId, UARTServiceId, TXServiceId, data)
-      .then(() => {
-        return;
-      })
-      .catch((error) => {
-        return error;
-      });
-  }
-
   disconnectDevice() {
     const { navigate } = this.props.navigation;
     BleManager.disconnect(this.props.deviceId)
-      .then(() => {
-	this.props.actions.disconnectDevice();
-        AsyncStorage.removeItem('deviceId');
+      .then(async () => {
+	await this.props.actions.disconnectDevice();
 	navigate('Ble', { title: 'Bluetooth'});
       })
       .catch((error) => {
@@ -61,12 +38,19 @@ class DeviceView extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <AppButton onPress={() => this.sendCommand("On") }>
+        <AppText style={styles.title}>
+          Lightbar
+        </AppText>
+        <AppText style={styles.subText}>
+          Connected
+        </AppText>
+        <AppButton onPress={() => BleHelper.sendCommand(this.props.deviceId, "On") }>
           On
         </AppButton>
-        <AppButton onPress={() => this.sendCommand("Off") }>
+        <AppButton onPress={() => BleHelper.sendCommand(this.props.deviceId, "Off") }>
           Off
         </AppButton>
+        <AppSlider minValue={25} maxValue={80} step={5} value={50} />
         <AppButton onPress={() => this.disconnectDevice() }>
           Disconnect
         </AppButton>
@@ -81,6 +65,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: gStyles.container.backgroundColor,
+  },
+  title: {
+    fontSize: gStyles.title.fontSize,
+    textAlign: 'center',
+  },
+  subText: {
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 

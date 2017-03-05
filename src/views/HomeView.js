@@ -91,7 +91,7 @@ class HomeView extends Component {
         BleManager.scan([], 2, false)
           .then(() => {
             this.props.bleActions.updateConnectedDevice(deviceId);
-            BleManager.connect(deviceId)
+            BleManager.connect(deviceId);
           });
       }
     });
