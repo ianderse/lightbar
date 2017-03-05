@@ -6,11 +6,8 @@ import {
   Slider,
 } from 'react-native';
 
-import AppText from '../components/appText';
-import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import BleHelper from '../helpers/bleHelper.js';
-import gStyles from '../styles/global.json';
 
 class AppSlider extends Component {
   onSliderChange(value) {
@@ -39,11 +36,14 @@ const styles = StyleSheet.create({
   },
 });
 
-AppButton.propTypes = {
+AppSlider.propTypes = {
   value: React.PropTypes.number,
   minValue: React.PropTypes.number,
   maxValue: React.PropTypes.number,
   step: React.PropTypes.number,
+  actions: React.PropTypes.object,
+  deviceId: React.PropTypes.string,
+  sliderValue: React.PropTypes.number,
 };
 
 function mapStateToProps(state) {

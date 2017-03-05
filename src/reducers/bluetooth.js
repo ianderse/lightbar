@@ -17,7 +17,7 @@ function bluetooth (state = initialState, action) {
       AsyncStorage.removeItem('deviceId');
       return {
         ...state,
-        deviceId: null
+        deviceId: null,
         sliderValue: 50,
       };
     case types.UPDATE_SLIDER:

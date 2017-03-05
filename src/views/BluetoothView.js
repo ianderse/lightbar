@@ -47,7 +47,6 @@ class BluetoothView extends Component {
       if (!found) {
         // Need to find out why it's not saving the name change always
         if (data.advertising.kCBAdvDataLocalName === 'CLLightbar' || data.advertising.kCBAdvDataLocalName === 'Adafruit Bluefruit LE') {
-          console.log('found');
           var newList = this.state.ble.concat(data)
           this.setState({ ble: newList })
         }
