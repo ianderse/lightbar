@@ -29,7 +29,7 @@ export default class BleHelper {
     }
   }
 
-  stringToBytes(string) {
+  static stringToBytes(string) {
     var array = new Uint8Array(string.length);
     for (var i = 0, l = string.length; i < l; i++) {
       array[i] = string.charCodeAt(i);
@@ -38,7 +38,8 @@ export default class BleHelper {
   }
 
   static sendCommand(deviceId, command) {
-    var data = base64.fromByteArray(new Uint8Array(this.stringToBytes(command)));
+    const stbCommand = new Uint8Array(this.stringToBytes(command));
+    var data = base64.fromByteArray(stbCommand);
     const UARTServiceId = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
     const TXServiceId = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
 

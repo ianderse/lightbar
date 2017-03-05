@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import AppButton from '../components/appButton';
+import AppText from '../components/appText';
 import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import BleManager from 'react-native-ble-manager';
@@ -50,7 +51,7 @@ class DeviceView extends Component {
         <AppButton onPress={() => BleHelper.sendCommand(this.props.deviceId, "Off") }>
           Off
         </AppButton>
-        <AppButton onPress={() => BleHelper.disconnectDevice() }>
+        <AppButton onPress={() => this.disconnectDevice() }>
           Disconnect
         </AppButton>
       </View>

@@ -6,6 +6,8 @@ import {
   Slider,
 } from 'react-native';
 
+import AppText from '../components/appText';
+import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import gStyles from '../styles/global.json';
 
@@ -52,4 +54,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(appSlider);
+export default connect(mapStateToProps, mapDispatchToProps)(AppSlider);
