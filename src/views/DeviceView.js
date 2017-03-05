@@ -50,7 +50,7 @@ class DeviceView extends Component {
         <AppButton onPress={() => BleHelper.sendCommand(this.props.deviceId, "Off") }>
           Off
         </AppButton>
-        <AppSlider minValue={25} maxValue={100} step={5} value={50} />
+        <AppSlider minValue={25} maxValue={80} step={5} value={50} />
         <AppButton onPress={() => this.disconnectDevice() }>
           Disconnect
         </AppButton>

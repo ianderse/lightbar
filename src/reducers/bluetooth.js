@@ -3,13 +3,12 @@ import { AsyncStorage } from 'react-native';
 
 const initialState = {
   deviceId: null,
-  sliderValue: null,
+  sliderValue: 50,
 }
 
 function bluetooth (state = initialState, action) {
   switch (action.type) {
     case types.UPDATE_CONNECTED_DEVICE:
-      console.log('ucd' + action.deviceId);
       return {
         ...state,
         deviceId: action.deviceId
@@ -19,6 +18,7 @@ function bluetooth (state = initialState, action) {
       return {
         ...state,
         deviceId: null
+        sliderValue: 50,
       };
     case types.UPDATE_SLIDER:
       return {

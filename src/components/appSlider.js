@@ -21,7 +21,8 @@ class AppSlider extends Component {
   render() {
     return (
       <Slider
-        value={this.props.value}
+        style={styles.defaultSlider}
+        value={this.props.sliderValue}
         minimumValue={this.props.minValue}
         maximumValue={this.props.maxValue}
         step={this.props.step}
@@ -33,6 +34,7 @@ class AppSlider extends Component {
 
 const styles = StyleSheet.create({
   defaultSlider: {
+    width: 300,
     alignSelf: 'center',
   },
 });
