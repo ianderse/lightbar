@@ -65,17 +65,15 @@ class BluetoothView extends Component {
 
     connect(id) {
       const { navigate } = this.props.navigation;
-      let deviceVar;
 
       BleManager.connect(id)
         .then((device) => {
-          deviceVar = device;
+          this.props.actions.updateConnectedDevice(device.id);
+          AsyncStorage.setItem('deviceId', device.id);
+          navigate('Device');
         }).catch((error) => {
           return error;
         });
-        this.props.actions.updateConnectedDevice(deviceVar.id);
-        AsyncStorage.setItem('deviceId', deviceVar.id);
-      navigate('Device');
     }
 
     buildDeviceInfo() {
@@ -151,4 +149,4 @@ BluetoothView.propTypes = {
   children: React.PropTypes.string,
 };
 
-export default connect(mapDispatchToProps)(BluetoothView);
+export default connect(null, mapDispatchToProps)(BluetoothView);
