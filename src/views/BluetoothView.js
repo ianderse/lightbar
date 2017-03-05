@@ -45,7 +45,9 @@ class BluetoothView extends Component {
       });
 
       if (!found) {
-        if (data.advertising.kCBAdvDataLocalName === 'CLLightbar') {
+        // Need to find out why it's not saving the name change always
+        if (data.advertising.kCBAdvDataLocalName === 'CLLightbar' || data.advertising.kCBAdvDataLocalName === 'Adafruit Bluefruit LE') {
+          console.log('found');
           var newList = this.state.ble.concat(data)
           this.setState({ ble: newList })
         }
@@ -63,14 +65,17 @@ class BluetoothView extends Component {
 
     connect(id) {
       const { navigate } = this.props.navigation;
+      let deviceVar;
+
       BleManager.connect(id)
         .then((device) => {
-          AsyncStorage.setItem('deviceId', device.id);
-          this.props.actions.updateConnectedDevice(device.id);
-          navigate('Device');
+          deviceVar = device;
         }).catch((error) => {
           return error;
         });
+        this.props.actions.updateConnectedDevice(deviceVar.id);
+        AsyncStorage.setItem('deviceId', deviceVar.id);
+      navigate('Device');
     }
 
     buildDeviceInfo() {
@@ -81,7 +86,7 @@ class BluetoothView extends Component {
             {this.state.ble.map((e) =>
               <View key={e.id}>
                 <AppText>
-                  Device ID: {e.id}
+                  {`Device ID: ${e.id}`}
                 </AppText>
                 <AppText>
                   Lightbar Found

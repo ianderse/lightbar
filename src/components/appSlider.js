@@ -9,11 +9,13 @@ import {
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import * as bluetoothActions from '../actions/bluetoothActions';
+import BleHelper from '../helpers/bleHelper.js';
 import gStyles from '../styles/global.json';
 
 class AppSlider extends Component {
   onSliderChange(value) {
     this.props.actions.updateSlider(value);
+    BleHelper.sendCommand(this.props.deviceId, "SP" + value);
   }
 
   render() {
@@ -44,7 +46,8 @@ AppButton.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    sliderValue: state.bluetooth.sliderValue
+    sliderValue: state.bluetooth.sliderValue,
+    deviceId: state.bluetooth.deviceId,
   };
 }
 

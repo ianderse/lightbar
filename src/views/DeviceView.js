@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux';
 import {
   StyleSheet,
   View,
-  AsyncStorage,
 } from 'react-native';
 
 import AppButton from '../components/appButton';
 import AppText from '../components/appText';
+import AppSlider from '../components/appSlider';
 import gStyles from '../styles/global.json';
 import * as bluetoothActions from '../actions/bluetoothActions';
 import BleManager from 'react-native-ble-manager';
@@ -26,9 +26,8 @@ class DeviceView extends Component {
   disconnectDevice() {
     const { navigate } = this.props.navigation;
     BleManager.disconnect(this.props.deviceId)
-      .then(() => {
-	this.props.actions.disconnectDevice();
-        AsyncStorage.removeItem('deviceId');
+      .then(async () => {
+	await this.props.actions.disconnectDevice();
 	navigate('Ble', { title: 'Bluetooth'});
       })
       .catch((error) => {
@@ -51,6 +50,7 @@ class DeviceView extends Component {
         <AppButton onPress={() => BleHelper.sendCommand(this.props.deviceId, "Off") }>
           Off
         </AppButton>
+        <AppSlider minValue={25} maxValue={100} step={5} value={50} />
         <AppButton onPress={() => this.disconnectDevice() }>
           Disconnect
         </AppButton>
