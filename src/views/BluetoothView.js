@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   StyleSheet,
-  Text,
   View,
   NativeAppEventEmitter,
   AsyncStorage
@@ -11,6 +10,7 @@ import {
 import BleManager from 'react-native-ble-manager';
 import BleHelper from '../helpers/bleHelper.js';
 import * as bluetoothActions from '../actions/bluetoothActions';
+import DeviceInfo from '../components/BluetoothView/deviceInfo';
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import gStyles from '../styles/global.json';
@@ -75,40 +75,13 @@ class BluetoothView extends Component {
         });
     }
 
-    buildDeviceInfo() {
-      let deviceInfo;
-      if (this.state.ble.length > 0) {
-        deviceInfo = (
-          <View>
-            {this.state.ble.map((e) =>
-              <View key={e.id}>
-                <AppText>
-                  {`Device ID: ${e.id}`}
-                </AppText>
-                <AppText>
-                  Lightbar Found
-                </AppText>
-                <AppButton onPress={() => this.connect(e.id)}>
-                  <Text>Connect</Text>
-                </AppButton>
-              </View>
-            )}
-          </View>
-        )
-      } else {
-        deviceInfo = <AppText style={styles.error}>No devices found</AppText>
-      }
-
-      return deviceInfo;
-    }
-
     render() {
       return (
         <View style={styles.container}>
           <AppText style={styles.title}>
             Connect to Lightbar
           </AppText>
-          {this.buildDeviceInfo()}
+          <DeviceInfo devices={this.state.ble} connect={() => this.connect(id)} />
           <AppButton onPress={() => this.toggleScanning(!this.state.scanning) }>
             Scan
           </AppButton>
