@@ -9,6 +9,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 
+import { Button, Card } from 'react-native-material-ui';
 import AppText from '../components/appText';
 import AppButton from '../components/appButton';
 import gStyles from '../styles/global.json';
@@ -125,40 +126,49 @@ class HomeView extends Component {
           <AppText>
           {welcomeText}
           </AppText>
-          <AppButton
-            onPress={() => this.nextPage() } >
-            Enter
-          </AppButton>
-          <AppButton
-            onPress={() => this.logout() } >
-            Logout
-          </AppButton>
-
+          <Button
+            raised
+            primary
+            onPress={() => this.nextPage() }
+            text="Enter"
+          />
+          <Button
+            raised
+            primary
+            onPress={() => this.logout() }
+            text="Logout"
+          />
         </View>
       );
     } else {
       welcome = (
-        <View>
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            value={this.state.userName}
-            onChangeText={(text) => this.setState({user: text})}
-          />
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="Password"
-            value={this.state.password}
-            onChangeText={(text) => this.setState({password: text})}
-          />
-          <AppButton
-            style={{alignSelf: 'center'}}
-            onPress={() => this.login() } >
-            Login
-          </AppButton>
-
-        </View>
+        <Card>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={this.state.userName}
+              onChangeText={(text) => this.setState({user: text})}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={true}
+              placeholder="Password"
+              value={this.state.password}
+              onChangeText={(text) => this.setState({password: text})}
+            />
+          </View>
+          <View style={styles.buttonWrapper}>
+            <Button
+              raised
+              primary
+              onPress={() => this.login() }
+              text="Login"
+            />
+          </View>
+        </Card>
       )
     }
     return welcome;
@@ -187,6 +197,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: gStyles.container.backgroundColor,
   },
+  cardContainer: {
+    top: 20,
+  },
   error: {
     fontSize: gStyles.error.fontSize,
     color: gStyles.error.color,
@@ -198,14 +211,21 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     width: 235,
-    borderWidth: 1,
-    borderColor: gStyles.input.borderColor,
     backgroundColor: gStyles.input.backgroundColor,
     textAlign: 'center',
     alignSelf: 'center',
-    marginVertical: 15,
     fontFamily: gStyles.global.fontFamily,
   },
+  inputWrapper: {
+    margin: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#BDBDBD',
+  },
+  buttonWrapper: {
+    top: 20,
+    marginHorizontal: 20,
+  },
+
 });
 
 function mapStateToProps(state) {
