@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
   defaultText: {
     fontSize: 24,
     fontFamily: gStyles.global.fontFamily,
-    color: gStyles.text.color,
   }
 });
 

@@ -128,13 +128,13 @@ class HomeView extends Component {
           </AppText>
           <Button
             raised
-            primary
+            accent
             onPress={() => this.nextPage() }
             text="Enter"
           />
           <Button
             raised
-            primary
+            accent
             onPress={() => this.logout() }
             text="Logout"
           />
@@ -163,7 +163,7 @@ class HomeView extends Component {
           <View style={styles.buttonWrapper}>
             <Button
               raised
-              primary
+              accent
               onPress={() => this.login() }
               text="Login"
             />
@@ -176,9 +176,11 @@ class HomeView extends Component {
 
   render() {
     const welcomeSection = this.buildWelcome();
+    const palette = StyleSheet.flatten(this.context.uiTheme.palette);
+
     return (
-      <View style={styles.container}>
-        <AppText style={styles.title}>
+      <View style={[styles.container, {backgroundColor: palette.primaryColor}]}>
+        <AppText style={[styles.title, {color: palette.canvasColor}]}>
           Lightbar
         </AppText>
         {welcomeSection}
@@ -195,7 +197,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: gStyles.container.backgroundColor,
   },
   cardContainer: {
     top: 20,
@@ -248,6 +249,10 @@ HomeView.propTypes = {
   bleActions: React.PropTypes.object,
   deviceId: React.PropTypes.string,
   user: React.PropTypes.string,
+};
+
+HomeView.contextTypes = {
+  uiTheme: React.PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeView);
